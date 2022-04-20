@@ -1,5 +1,6 @@
 .registerContainer {
   margin: auto;
+  width: 320px;
 }
 .registerForm {
   display: flex;
