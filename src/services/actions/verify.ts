@@ -1,16 +1,15 @@
 // constants
 import {
-  SET_VERIFY_FAILED, SET_VERIFY_REQUEST, SET_VERIFY_SUCCESS,
+  SET_VERIFY_FAILED,
+  SET_VERIFY_REQUEST,
+  SET_VERIFY_SUCCESS,
 } from "../constants";
 
 // utils
-import {AppDispatch, AppThunk} from "../../utils/types";
+import { AppDispatch, AppThunk } from "../../utils/types";
 
 // api
-import {
-  verifyRequest,
-} from "../api";
-
+import { verifyRequest } from "../api";
 
 export interface ISetVerifyAction {
   readonly type: typeof SET_VERIFY_REQUEST;
@@ -25,18 +24,24 @@ export interface ISetVerifySuccessAction {
   readonly key: string;
 }
 
-export type TVerifyActions = ISetVerifyAction | ISetVerifyFailedAction | ISetVerifySuccessAction;
+export type TVerifyActions =
+  | ISetVerifyAction
+  | ISetVerifyFailedAction
+  | ISetVerifySuccessAction;
 
 export const setVerifyAction = (): ISetVerifyAction => ({
-  type: SET_VERIFY_REQUEST
+  type: SET_VERIFY_REQUEST,
 });
 
 export const setVerifyFailedAction = (): ISetVerifyFailedAction => ({
-  type: SET_VERIFY_FAILED
+  type: SET_VERIFY_FAILED,
 });
 
-export const setVerifySuccessAction = (key: string): ISetVerifySuccessAction => ({
-  type: SET_VERIFY_SUCCESS, key
+export const setVerifySuccessAction = (
+  key: string
+): ISetVerifySuccessAction => ({
+  type: SET_VERIFY_SUCCESS,
+  key,
 });
 
 export const verify: AppThunk = (key: string) => {
@@ -56,7 +61,7 @@ export const verify: AppThunk = (key: string) => {
       })
       .catch((err) => {
         dispatch(setVerifyFailedAction());
-        console.log(err);
+        alert(`При выполнении запроса произощла ошибка: ${err.message}`);
       });
   };
-}
+};

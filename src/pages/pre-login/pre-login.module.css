@@ -1,5 +1,6 @@
 .loginContainer {
   margin: auto;
+  width: 320px;
 }
 .loginForm {
   display: flex;
