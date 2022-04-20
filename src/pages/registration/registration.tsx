@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "../../services/hooks";
 
 // services
 import {register} from "../../services/actions/user";
+import {verify} from "../../services/actions/verify";
 
 // forms
 import {FormProvider, useForm} from "react-hook-form";
@@ -33,10 +34,12 @@ const Registration: React.FC = () => {
     dispatch(register(data));
   }, [dispatch]);
 
+
+
   if (data['user']) {
     return (<Redirect
         to={{
-          pathname: "/login",
+          pathname: "/pre-login",
         }}
       />);
   }
