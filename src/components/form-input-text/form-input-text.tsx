@@ -17,11 +17,9 @@ import styles from "./form-input-text.module.css";
 const FormInputText = ({name, label, type}: IFormTextInputProps) => {
   const {control} = useFormContext();
 
-
   return (<Controller
     name={name}
     control={control}
-    rules={{ required: "Обязательно для заполнения" }}
     defaultValue=""
     render={({field: {onChange, value}, fieldState: {error}, formState}) => (<TextField
       helperText={error ? error.message : null}

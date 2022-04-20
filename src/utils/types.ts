@@ -5,9 +5,10 @@ import {Action, ActionCreator, Dispatch} from "redux";
 // services
 import {store} from "../services/store";
 import {TUserActions} from "../services/actions/user";
+import {TVerifyActions} from "../services/actions/verify";
 
 
-type TApplicationActions = TUserActions;
+type TApplicationActions = TUserActions | TVerifyActions;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = Dispatch<TApplicationActions>;
@@ -17,6 +18,10 @@ export interface IFormTextInputProps {
   name: string
   label: string
   type: string
+}
+
+export interface IFormPasswordInputProps {
+  name: string
 }
 
 export type TRegisterRes = {
