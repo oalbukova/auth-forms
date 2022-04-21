@@ -34,10 +34,9 @@ const App = (): JSX.Element => {
         <Route path="/registration" children={<Registration />} />
         <Route path="/pre-login" children={<PreLogin />} />
         <Route path="/login" children={<Login />} />
-        <Route path="/main" children={<Main />} />
-        {/*<ProtectedRoute path="/main">*/}
-        {/*  /!*<MainPage/>*!/*/}
-        {/*</ProtectedRoute>*/}
+        <ProtectedRoute path="/" >
+          <Main/>
+        </ProtectedRoute>
       </Switch>
     </div>
   );

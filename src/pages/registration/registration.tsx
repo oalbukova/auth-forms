@@ -24,7 +24,7 @@ import styles from "./registration.module.css";
 
 const Registration: React.FC = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.userReducer);
+  const { user } = useSelector((state) => state.userReducer);
   const methods = useForm({ resolver: yupResolver(validationSchema) });
   const { handleSubmit } = methods;
 
@@ -35,7 +35,7 @@ const Registration: React.FC = () => {
     [dispatch]
   );
 
-  if ("user" in data) {
+  if ("username" in user) {
     return (
       <Redirect
         to={{

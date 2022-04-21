@@ -5,7 +5,7 @@ import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 // services
-import { useDispatch } from "../../services/hooks";
+import { useDispatch, useSelector } from "../../services/hooks";
 import { login } from "../../services/actions/user";
 
 // components
@@ -23,6 +23,7 @@ import { Card, Typography, Button } from "@mui/material";
 
 // styles
 import styles from "./login.module.css";
+import { Redirect } from "react-router-dom";
 
 interface ILoginForm {
   email: string;
@@ -31,6 +32,7 @@ interface ILoginForm {
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.userReducer);
   const methods = useForm<ILoginForm>({
     resolver: yupResolver(validationSchema),
   });
@@ -39,6 +41,16 @@ const Login: React.FC = () => {
   const onSubmit = (data: TUser): void => {
     dispatch(login(data));
   };
+
+  if ("refresh" in token) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+        }}
+      />
+    );
+  }
 
   return (
     <Card variant="outlined" className={styles.loginContainer}>
