@@ -25,7 +25,7 @@ const App = (): JSX.Element => {
       const key = window.location.search.substring(5);
       dispatch(verify(key));
     }
-  }, [window.location]);
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
@@ -34,7 +34,7 @@ const App = (): JSX.Element => {
         <Route path="/registration" children={<Registration />} />
         <Route path="/pre-login" children={<PreLogin />} />
         <Route path="/login" children={<Login />} />
-        <ProtectedRoute path="/" >
+        <ProtectedRoute path="/" exact>
           <Main/>
         </ProtectedRoute>
       </Switch>
