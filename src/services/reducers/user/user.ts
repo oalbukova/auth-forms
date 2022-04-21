@@ -9,38 +9,43 @@ import {
   LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  DELETE_USER_FAILED,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
 } from "../../constants";
 
 // actions
 import { TUserActions } from "../../actions/user";
 
 // utils
-import { TPreLoginRes, TRegisterRes, TUser } from "../../../utils/types";
+import { TLoginRes, TResponse, TRegisterRes } from "../../../utils/types";
 
 type TUserState = {
-  data: TRegisterRes | TPreLoginRes;
-  refresh: string;
-  access: string;
-  user: TUser;
+  user: TRegisterRes;
+  preLoginRes: TResponse;
+  token: TLoginRes;
   userRequest: boolean;
   userFailed: boolean;
   authRequest: boolean;
   authFailed: boolean;
   loginRequest: boolean;
   loginFailed: boolean;
+  deleteUserRequest: boolean;
+  deleteUserFailed: boolean;
 };
 
 const initialUserState: TUserState = {
-  data: {},
+  preLoginRes: {},
   user: {},
-  refresh: "",
-  access: "",
+  token: {},
   userRequest: false,
   userFailed: false,
   authRequest: false,
   authFailed: false,
   loginRequest: false,
   loginFailed: false,
+  deleteUserRequest: false,
+  deleteUserFailed: false,
 };
 
 export const userReducer = (state = initialUserState, action: TUserActions) => {
@@ -54,7 +59,7 @@ export const userReducer = (state = initialUserState, action: TUserActions) => {
     case SET_USER_SUCCESS: {
       return {
         ...state,
-        data: action,
+        user: action.user,
         userRequest: false,
       };
     }
@@ -70,7 +75,7 @@ export const userReducer = (state = initialUserState, action: TUserActions) => {
     case AUTHORIZE_SUCCESS: {
       return {
         ...state,
-        data: action,
+        preLoginRes: action.preLoginRes,
         authRequest: false,
       };
     }
@@ -86,12 +91,29 @@ export const userReducer = (state = initialUserState, action: TUserActions) => {
     case LOGIN_SUCCESS: {
       return {
         ...state,
-        data: action,
+        token: action.token,
         loginRequest: false,
       };
     }
     case LOGIN_FAILED: {
       return { ...state, loginFailed: true };
+    }
+    case DELETE_USER_REQUEST: {
+      return {
+        ...state,
+        deleteUserRequest: true,
+      };
+    }
+    case DELETE_USER_SUCCESS: {
+      return {
+        ...state,
+        deleteUserFailed: false,
+        token: {},
+        deleteUserRequest: false,
+      };
+    }
+    case DELETE_USER_FAILED: {
+      return { ...state, deleteUserFailed: true, deleteUserRequest: false };
     }
 
     default: {

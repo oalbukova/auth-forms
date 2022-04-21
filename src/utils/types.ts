@@ -15,6 +15,10 @@ export type AppThunk<ReturnType = void> = ActionCreator<
   ThunkAction<ReturnType, Action, RootState, TApplicationActions>
 >;
 
+export type THistoryState = {
+  history: History;
+};
+
 export interface IFormTextInputProps {
   name: string;
   label: string;
@@ -34,8 +38,13 @@ export type TRegisterRes = {
   email?: string;
 };
 
-export type TPreLoginRes = {
+export type TResponse = {
   detail?: string;
+};
+
+export type TLoginRes = {
+  access?: string;
+  refresh?: string;
 };
 
 export type TAuthorize = {

@@ -36,14 +36,14 @@ const PreLogin: React.FC = () => {
   const methods = useForm<ILoginForm>({
     resolver: yupResolver(validationSchema),
   });
-  const { data } = useSelector((state) => state.userReducer);
+  const { preLoginRes } = useSelector((state) => state.userReducer);
   const { handleSubmit } = methods;
 
   const onSubmit = (data: TUser): void => {
     dispatch(authorize(data));
   };
 
-  if ("preLoginRes" in data) {
+  if ("detail" in preLoginRes) {
     return (
       <Redirect
         to={{

@@ -9,13 +9,27 @@ import {
   SET_USER_FAILED,
   SET_USER_REQUEST,
   SET_USER_SUCCESS,
+  DELETE_USER_FAILED,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
 } from "../constants";
 
 // utils
-import { AppDispatch, AppThunk, TPreLoginRes, TUser } from "../../utils/types";
+import {
+  AppDispatch,
+  AppThunk,
+  TResponse,
+  TLoginRes,
+  TUser,
+} from "../../utils/types";
 
 // api
-import { authorizeRequest, loginRequest, registerRequest } from "../api";
+import {
+  authorizeRequest,
+  loginRequest,
+  registerRequest,
+  deleteUserRequest,
+} from "../api";
 
 export interface ISetUserAction {
   readonly type: typeof SET_USER_REQUEST;
@@ -40,7 +54,7 @@ export interface IAuthorizeFailedAction {
 
 export interface IAuthorizeSuccessAction {
   readonly type: typeof AUTHORIZE_SUCCESS;
-  readonly preLoginRes: TPreLoginRes;
+  readonly preLoginRes: TResponse;
 }
 
 export interface ILoginAction {
@@ -53,7 +67,20 @@ export interface ILoginFailedAction {
 
 export interface ILoginSuccessAction {
   readonly type: typeof LOGIN_SUCCESS;
-  readonly user: TUser;
+  readonly token: TLoginRes;
+}
+
+export interface IDeleteUserAction {
+  readonly type: typeof DELETE_USER_REQUEST;
+}
+
+export interface IDeleteUserFailedAction {
+  readonly type: typeof DELETE_USER_FAILED;
+}
+
+export interface IDeleteUserSuccessAction {
+  readonly type: typeof DELETE_USER_SUCCESS;
+  readonly deleteRes: TResponse;
 }
 
 export type TUserActions =
@@ -65,7 +92,10 @@ export type TUserActions =
   | IAuthorizeSuccessAction
   | ILoginAction
   | ILoginFailedAction
-  | ILoginSuccessAction;
+  | ILoginSuccessAction
+  | IDeleteUserAction
+  | IDeleteUserFailedAction
+  | IDeleteUserSuccessAction;
 
 export const setUserAction = (): ISetUserAction => ({
   type: SET_USER_REQUEST,
@@ -89,7 +119,7 @@ export const authorizeFailedAction = (): IAuthorizeFailedAction => ({
 });
 
 export const authorizeSuccessAction = (
-  preLoginRes: TPreLoginRes
+  preLoginRes: TResponse
 ): IAuthorizeSuccessAction => ({
   type: AUTHORIZE_SUCCESS,
   preLoginRes,
@@ -103,9 +133,24 @@ export const loginFailedAction = (): ILoginFailedAction => ({
   type: LOGIN_FAILED,
 });
 
-export const loginSuccessAction = (user: TUser): ILoginSuccessAction => ({
+export const loginSuccessAction = (token: TLoginRes): ILoginSuccessAction => ({
   type: LOGIN_SUCCESS,
-  user,
+  token,
+});
+
+export const deleteUserAction = (): IDeleteUserAction => ({
+  type: DELETE_USER_REQUEST,
+});
+
+export const deleteUserFailedAction = (): IDeleteUserFailedAction => ({
+  type: DELETE_USER_FAILED,
+});
+
+export const deleteUserSuccessAction = (
+  deleteRes: TResponse
+): IDeleteUserSuccessAction => ({
+  type: DELETE_USER_SUCCESS,
+  deleteRes,
 });
 
 export const register: AppThunk = (data) => {
@@ -121,6 +166,7 @@ export const register: AppThunk = (data) => {
         return Promise.reject(res.status);
       })
       .then((data) => {
+        console.log(data);
         dispatch(setUserSuccessAction(data));
       })
       .catch((err) => {
@@ -146,7 +192,7 @@ export const authorize: AppThunk = (data) => {
         dispatch(authorizeSuccessAction(data));
       })
       .catch((err) => {
-        authorizeFailedAction();
+        dispatch(authorizeFailedAction());
         alert(`При выполнении запроса произощла ошибка: ${err}`);
       });
   };
@@ -167,7 +213,31 @@ export const login: AppThunk = (data) => {
         dispatch(loginSuccessAction(data));
       })
       .catch((err) => {
-        loginFailedAction();
+        dispatch(loginFailedAction());
+        alert(`При выполнении запроса произощла ошибка: ${err}`);
+      });
+  };
+};
+
+export const deleteUser: AppThunk = (token: string | null) => {
+  return function (dispatch: AppDispatch) {
+    dispatch(deleteUserAction());
+    deleteUserRequest(token)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          dispatch(deleteUserFailedAction());
+        }
+        return Promise.reject(res.status);
+      })
+      .then((data) => {
+        if (data.success) {
+          dispatch(deleteUserSuccessAction(data));
+        }
+      })
+      .catch((err) => {
+        dispatch(deleteUserFailedAction());
         alert(`При выполнении запроса произощла ошибка: ${err}`);
       });
   };

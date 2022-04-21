@@ -39,7 +39,7 @@ const Main: React.FC = () => {
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Стек: React, Redux, TypeScript, React Router, React Hook Form,
-              Material UI, Yup, CSS-модули, prettier.
+              Material UI, Yup, CSS-модули, prettier, адаптивная верстка.
             </Typography>
           </CardContent>
         </CardActionArea>
